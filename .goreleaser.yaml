@@ -1,0 +1,48 @@
+project_name: helpscout-exporter
+
+release:
+  github:
+    owner: ribice
+    name: helpscout-exporter
+
+builds:
+- binary: helpscout-exporter
+  goos:
+  - darwin
+  - windows
+  - linux
+  goarch:
+  - amd64
+  - 386
+  ldflags:
+  - -s -w
+  env:
+  - CGO_ENABLED=0
+  main: main.go
+
+archives:
+  - replacements:
+      darwin: macOS
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE.MD
+
+snapshot:
+  name_template: SNAPSHOT-{{ .Commit }}
+
+checksum:
+  name_template: '{{ .ProjectName }}-{{ .Version }}-checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+    - '^dev:'
+    - 'README'
+    - Merge pull request
+    - Merge branch
